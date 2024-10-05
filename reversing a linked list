@@ -1,0 +1,77 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct ListNode {
+    int val;
+    struct ListNode* next;
+};
+
+struct ListNode* reverseList(struct ListNode* head) {
+    struct ListNode* prev = NULL;
+    struct ListNode* current = head;
+    struct ListNode* next = NULL;
+
+    while (current != NULL) {
+        next = current->next;  
+        current->next = prev;  
+        prev = current;        
+        current = next;
+    }
+
+    return prev;  
+}
+
+void printList(struct ListNode* node) {
+    while (node != NULL) {
+        printf("%d ", node->val);
+        node = node->next;
+    }
+    printf("\n");
+}
+
+struct ListNode* createNode(int val) {
+    struct ListNode* newNode = (struct ListNode*)malloc(sizeof(struct ListNode));
+    newNode->val = val;
+    newNode->next = NULL;
+    return newNode;
+}
+
+int main() {
+    struct ListNode* head = NULL;
+    struct ListNode* tail = NULL;
+    int n, value;
+
+    printf("Enter the number of elements in the linked list: ");
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; i++) {
+        printf("Enter element %d: ", i + 1);
+        scanf("%d", &value);
+        
+        struct ListNode* newNode = createNode(value);
+        
+        if (head == NULL) {
+            head = newNode;  
+            tail = newNode;  
+        } else {
+            tail->next = newNode;  
+            tail = newNode;       
+        }
+    }
+
+    printf("Original Linked List:\n");
+    printList(head);
+
+    head = reverseList(head);
+
+    printf("Reversed Linked List:\n");
+    printList(head);
+
+    struct ListNode* temp;
+    while (head != NULL) {
+        temp = head;
+        head = head->next;
+        free(temp);
+    }
+
+    return 0;
+}
